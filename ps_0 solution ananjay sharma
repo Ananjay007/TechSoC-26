@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int N;
+    cout << "enter the number of elements in the container" << endl;
+    cin >> N;
+    int W[N];
+    for (int i = 0; i < N; i++) {
+        cout << "enter the weight of container W" << i+1<< endl;
+        cin >> W[i];
+    }
+
+    for (int i = 0; i < N; i++) {
+        cout << "weight of container W" << i + 1 << " is " << W[i] << endl;
+    }
+    int Cap;
+    cout << "enter the maximum storage capicity of port";
+    cin >> Cap;
+    int Total = 0;
+    for (int i = 1; i < N; i++) {
+        Total += W[i];
+
+    }
+    cout << "Total shipment weight:" << Total << endl;
+    int avgW = Total / N;
+    cout << "Average container weight:" << avgW << endl;
+    int maxi = W[0];
+    int mini = W[0];
+    for (int i = 1; i < N + 1; i++) {
+        maxi = max (W[i], maxi);
+        mini = min (W[i], mini);
+    }
+    cout << "Weight of heaviest container:" << maxi << endl;
+    cout << "Weight of lightest container:" << mini << endl;
+    if (Total <= Cap) {
+        cout << "shipment can unload";
+    }
+    else {
+        cout << "ship can unloadd";
+    }
+    return 0;
+
+
+
+}
