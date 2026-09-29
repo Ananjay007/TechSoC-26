@@ -98,6 +98,7 @@ public:
       return 1;
    }
    void round(bender &hero,bender &enemy,int n){
+    cout<<endl<<endl<<endl;
     if(n==1){
         cout<<"Turn"<<n<<": "<<hero.name<<" goes first!";
         cout<<"   (Speed : "<<hero.speed<<" VS "<<enemy.speed<<")"<<endl;
@@ -142,6 +143,7 @@ public:
             cout<<endl<<endl<<enemy.name<<" fainted !"<<endl;
             break;
         }
+        cout<<endl;
         swap(hero,enemy);
         n++;
     }
