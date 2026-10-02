@@ -2,16 +2,12 @@
 using namespace std;
 int criticalnum =0;
 int effectivehit =0;
-
 int randomnum(int min_val , int max_val) {
-    std::random_device rd; 
-    std::mt19937 gen(rd()); 
-    std::uniform_int_distribution<int> distr(min_val, max_val); 
-    int random_num = distr(gen);
-    return random_num;
+    static std::mt19937 gen(std::chrono::steady_clock::now().time_since_epoch().count());
+    std::uniform_int_distribution<int> distr(min_val, max_val);
+    return distr(gen);
 }
 class bender {
-   
 public:
    string name;
    string element;
@@ -22,7 +18,6 @@ public:
    int speed = 0;
    string moves[4];
    int pls[4];
-   
 public:
    void display_stats(){
     cout<<name<<"  ("<<element<<") - HP:"<<currenthp<<"/"<<hp<<",Attack: "<<attack<<", Defence: "<<defence<<", Speed: "<<speed<<endl;
@@ -44,12 +39,11 @@ public:
         return 1;
     }
    }
-//    int totaldamage(bender& hero, bender& enemy,int j){
-//    int damage = static_cast<int>(std::round(static_cast<double>(hero.attack) * hero.pls[j] / enemy.defence));
-//     damage = static_cast<int>(damage*criticalmultiplier()*criticalmultiplier(hero,enemy,0));
-//     enemy.currenthp=enemy.currenthp - damage;
-//     return damage;
-//    }
+
+   bender() {}
+bender(string n, string e, int h, int a, int d, int s, string m0, string m1, string m2, string m3, int p0, int p1, int p2, int p3)
+    : name(n), element(e), hp(h), currenthp(h), attack(a), defence(d), speed(s), moves{m0, m1, m2, m3}, pls{p0, p1, p2, p3} {}
+
     int totaldamage(bender& hero, bender& enemy,int j){
     double base = static_cast<double>(hero.attack) * hero.pls[j] / enemy.defence;
     double crit = criticalmultiplier();
@@ -106,14 +100,11 @@ public:
     else{
         cout<<"Turn"<<n<<": "<<hero.name<<" strikes back!"<<endl;
     }
-        
-   }
+        }
    void duel(bender&a,bender&b){
     bender hero,enemy;
     int n =1;
-    int i = randomnum(0,3);
     cout<<"===DUEL BEGINS!==="<<endl;
-
     if(a.speed>b.speed){
         hero = a;
         enemy = b;
@@ -133,6 +124,7 @@ public:
     cout<<enemy.name<<" ("<<enemy.element<<", HP:"<<enemy.hp<<"/"<<enemy.hp<<")"<<endl;
     bool faint= false;
     while(!faint){
+        int i = randomnum(0,3);
         round(hero,enemy,n);
         cout<<hero.name<<" used "<<hero.moves[i]<<"!"<<endl;
         criticalmultiplier(hero,enemy,1);
@@ -155,39 +147,9 @@ public:
    }
 };
     
-
 int main(){
-    bender k , m ;
-    k.name = "Keal";
-    k.element="Fire";
-    k.hp = 100;
-    k.currenthp = k.hp;
-    k.attack= 58;
-    k.defence= 38;
-    k.speed= 88;  
-    k.moves[0] = "Ember Slash";
-    k.moves[1] = "Quick Surge";
-    k.moves[2] = "Focus";
-    k.moves[3] = "Flame Surge";
-    k.pls[0]=40;
-    k.pls[1]=30;
-    k.pls[2]=0;
-    k.pls[3]=70;
-    m.name = "Mira";
-    m.element = "Water";
-    m.hp = 92;
-    m.currenthp = m.hp;
-    m.attack=50;
-    m.defence=45;
-    m.speed=60;
-    m.moves[0] = "Water Whip";
-    m.moves[1] = "Tide Push";
-    m.moves[2] = "Mist Veil";
-    m.moves[3] = "Tidal Wave";
-    m.pls[0] = 35;
-    m.pls[1] = 25;
-    m.pls[2] = 0;
-    m.pls[3] = 60;
-    k.duel(k,m);
+    bender k("Keal", "Fire", 100, 58, 38, 88, "Ember Slash", "Quick Surge", "Focus", "Flame Surge", 40, 30, 0, 70);
+    bender m("Mira", "Water", 92, 50, 45, 60, "Water Whip", "Tide Push", "Mist Veil", "Tidal Wave", 35, 25, 0, 60);
+    k.duel(k, m);
     return 0;
 }
